@@ -85,7 +85,7 @@ const findById = async (id) => {
 
   const siteHash = await client.hgetallAsync(siteKey);
 
-  return (siteHash === null ? siteHash : remap(siteHash));
+  return siteHash === null ? siteHash : remap(siteHash);
 };
 
 /* eslint-disable arrow-body-style */
@@ -96,7 +96,13 @@ const findById = async (id) => {
  */
 const findAll = async () => {
   // START CHALLENGE #1
-  return [];
+  const client = redis.getClient();
+  const siteList = await client.smembersAsync(keyGenerator.getSiteIDsKey());
+  if (siteList.length === 0) return [];
+  const siteHashes = await Promise.all(
+    siteList.map((siteKey) => client.hgetallAsync(siteKey))
+  );
+  return siteHashes.map((siteHash) => remap(siteHash));
   // END CHALLENGE #1
 };
 /* eslint-enable */

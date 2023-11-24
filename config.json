@@ -6,10 +6,10 @@
   },
   "dataStores": {
     "redis": {
-      "host": "localhost",
-      "port": 6379,
-      "password": null,
-      "keyPrefix": "ru102js"
+      "host": "redis-19390.c308.sa-east-1-1.ec2.cloud.redislabs.com",
+      "port": 19390,
+      "password": "EuLPGCrIZM5CsoS1uYE6fBYUXqryuNkf",
+      "keyPrefix": "solar-"
     }
   }
 }
