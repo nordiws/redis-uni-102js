@@ -45,7 +45,7 @@ test(`${testSuiteName}: update`, async () => {
 
   const score = await client.zscoreAsync(
     keyGenerator.getCapacityRankingKey(),
-    testReading.siteId,
+    testReading.siteId
   );
 
   // Remember score will come back as a string, so ensure it is
@@ -82,13 +82,13 @@ test(`${testSuiteName}: getReport`, async () => {
   ];
 
   await Promise.all(
-    entries.map(
-      site => client.zaddAsync(
+    entries.map((site) =>
+      client.zaddAsync(
         keyGenerator.getCapacityRankingKey(),
         site.score,
-        site.id,
-      ),
-    ),
+        site.id
+      )
+    )
   );
 
   const report = await redisCapacityDAO.getReport(2);
@@ -118,7 +118,7 @@ test(`${testSuiteName}: getReport`, async () => {
 });
 
 // This test is for Challenge #4.
-test.skip(`${testSuiteName}: getRank`, async () => {
+test(`${testSuiteName}: getRank`, async () => {
   // Create some data
   const entries = [
     {
@@ -144,13 +144,13 @@ test.skip(`${testSuiteName}: getRank`, async () => {
   ];
 
   await Promise.all(
-    entries.map(
-      site => client.zaddAsync(
+    entries.map((site) =>
+      client.zaddAsync(
         keyGenerator.getCapacityRankingKey(),
         site.score,
-        site.id,
-      ),
-    ),
+        site.id
+      )
+    )
   );
 
   let result = await redisCapacityDAO.getRank(1);

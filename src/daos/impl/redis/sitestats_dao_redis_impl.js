@@ -76,28 +76,28 @@ const updateOptimized = async (meterReading) => {
   transaction.hset(key, 'lastReportingTime', timeUtils.getCurrentTimestamp());
   transaction.hincrby(key, 'meterReadingCount', 1);
   transaction.expire(key, weekSeconds);
-  await transaction.execAsync();
-  client.evalsha(
+  transaction.evalsha(
     compareAndUpdateScript.updateIfLess(
       key,
       'minWhGenerated',
       meterReading.whGenerated
     )
   );
-  client.evalsha(
+  transaction.evalsha(
     compareAndUpdateScript.updateIfGreater(
       key,
       'maxWhGenerated',
       meterReading.whGenerated
     )
   );
-  client.evalsha(
+  transaction.evalsha(
     compareAndUpdateScript.updateIfGreater(
       key,
       'maxCapacity',
       meterReading.whGenerated
     )
   );
+  await transaction.execAsync();
   // END Challenge #3
 };
 /* eslint-enable */

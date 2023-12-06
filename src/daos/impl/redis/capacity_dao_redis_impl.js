@@ -33,7 +33,7 @@ const update = async (meterReading) => {
   await client.zaddAsync(
     keyGenerator.getCapacityRankingKey(),
     currentCapacity,
-    meterReading.siteId,
+    meterReading.siteId
   );
 };
 
@@ -67,11 +67,10 @@ const getRank = async (siteId) => {
   // START Challenge #4
   const client = redis.getClient();
 
-  const result = await client.zrankAsync(
+  const result = await client.zrevrankAsync(
     keyGenerator.getCapacityRankingKey(),
-    `${siteId}`,
+    `${siteId}`
   );
-
   return result;
   // END Challenge #4
 };
