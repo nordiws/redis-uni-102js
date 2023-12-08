@@ -9,9 +9,21 @@ const timeUtils = require('../../../utils/time_utils');
 // Challenge 7
 const hitSlidingWindow = async (name, opts) => {
   const client = redis.getClient();
-
+  let response = -1;
   // START Challenge #7
-  return -2;
+  const transaction = client.multi();
+  const key = keyGenerator.getRateLimiterKey(name, opts.interval, opts.maxHits);
+  const now = new Date().getTime();
+  transaction.zadd(key, now, now + name);
+  transaction.zremrangebyscore(key, 0, now - opts.interval);
+  transaction.zcard(key);
+  transaction.expire(key, opts.interval);
+  const results = await transaction.execAsync();
+  const hits = results[results.length - 2];
+  if (hits <= opts.maxHits) {
+    response = opts.maxHits - hits;
+  }
+  return response;
   // END Challenge #7
 };
 
